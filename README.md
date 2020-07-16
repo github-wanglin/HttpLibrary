@@ -1,7 +1,8 @@
 ## TCP使用：支持传输Object对象
 
-#### 新建服务端：
+#### 创建服务端：
 *端口号：1080*
+
 *return 服务器返回给客户端的object*
 ```
 Server bioServer = ServerFactory.getServer(1080, new BiFunction<Socket, byte[], Object>() {
@@ -12,8 +13,9 @@ Server bioServer = ServerFactory.getServer(1080, new BiFunction<Socket, byte[], 
 });
 bioServer.start();
 ```
-#### 新建客户端：
+#### 创建客户端：
 *IP地址：192.168.31.137*
+
 *端口号：1080*
 ```
 Client client = ClientFactory.getClient("192.168.31.137", 1080, new TcpConnectCallback() {
