@@ -33,7 +33,7 @@ Client client = ClientFactory.getClient("192.168.31.137", 1080, new TcpConnectCa
 * 发送数据:
 
 ```
-<byte[] result  = client.send(obiect);>
+byte[] result  = client.send(obiect);
 ```
 * 断开链接：
 
