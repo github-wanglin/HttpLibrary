@@ -3,7 +3,8 @@
 #### 新建服务端：
 *端口号：1080*
 *return 服务器返回给客户端的object*
-```Server bioServer = ServerFactory.getServer(1080, new BiFunction<Socket, byte[], Object>() {
+```
+Server bioServer = ServerFactory.getServer(1080, new BiFunction<Socket, byte[], Object>() {
           @Override
           public Object apply(Socket socket, byte[] bytes) {
              return null;
@@ -14,7 +15,8 @@ bioServer.start();
 #### 新建客户端：
 *IP地址：192.168.31.137*
 *端口号：1080*
-```Client client = ClientFactory.getClient("192.168.31.137", 1080, new TcpConnectCallback() {
+```
+Client client = ClientFactory.getClient("192.168.31.137", 1080, new TcpConnectCallback() {
        @Override
        public void connected() {
 
@@ -27,10 +29,12 @@ bioServer.start();
 });
 ```
 * 发送数据:
+
 ```
 <byte[] result  = client.send(obiect);>
 ```
 * 断开链接：
+
 ```
 try {
    if (client != null && client.getSocket() != null) {
@@ -41,6 +45,7 @@ try {
    e.printStackTrace();
 }
 ```
+
 ## HTTP使用：支持get、post、put、delete请求方式，支持同步和异步的方式构建请求
 
 #### 同步请求：
@@ -55,8 +60,9 @@ Response response = client.newCall(request).execute();
 if (response != null && response.code() == 200) {
   data.setText(response.body().string());
  }
- ```
+```
 #### 异步请求：
+
 ```
 Request request = new Request.Builder()
           .url("https://www.wanandroid.com/banner/json")
@@ -78,6 +84,7 @@ client.newCall(request).enqueue(new Callback() {
 });
 ```
 #### GET方式：
+
 ```
 Request request = new Request.Builder()
           .url("https://www.wanandroid.com/banner/json")
@@ -91,6 +98,7 @@ if (response != null && response.code() == 200) {
  }
 ```
 #### POST方式：
+
 ```
 FormBody body = new FormBody.Builder()
          .add("username", "张三")
@@ -108,7 +116,8 @@ if (response != null && response.code() == 200) {
   data.setText(response.body().string());
  }
 ```
-####参数+文件上传：
+#### 参数+文件上传：
+
 ```
 String path = Environment.getExternalStorageDirectory().getAbsolutePath();
 
