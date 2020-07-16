@@ -1,8 +1,9 @@
 ## TCP使用：支持传输Object对象
+#### 新建服务端：
+`端口号：1080`
 
-新建服务端：
-端口号：1080
-return 服务器返回给客户端的object
+`return 服务器返回给客户端的object`
+```
 Server bioServer = ServerFactory.getServer(1080, new BiFunction<Socket, byte[], Object>() {
           @Override
           public Object apply(Socket socket, byte[] bytes) {
@@ -10,10 +11,12 @@ Server bioServer = ServerFactory.getServer(1080, new BiFunction<Socket, byte[], 
           }
 });
 bioServer.start();
+```
+#### 新建客户端：
+`IP地址：192.168.31.137`
 
-新建客户端：
-IP地址：192.168.31.137
-端口号：1080
+`端口号：1080`
+```
 Client client = ClientFactory.getClient("192.168.31.137", 1080, new TcpConnectCallback() {
        @Override
        public void connected() {
@@ -24,10 +27,13 @@ Client client = ClientFactory.getClient("192.168.31.137", 1080, new TcpConnectCa
        public void disConnected() {
 
        }
-});
-发送数据:
+});```
+* 发送数据:
+```
 byte[] result  = client.send(obiect);
-断开链接：
+```
+* 断开链接：
+```
 try {
    if (client != null && client.getSocket() != null) {
      client.getSocket().close();
@@ -36,10 +42,13 @@ try {
 } catch (IOException e) {
    e.printStackTrace();
 }
+```
 
-HTTP使用：支持get、post、put、delete请求方式，支持同步和异步的方式构建请求
+## HTTP使用：支持get、post、put、delete请求方式，支持同步和异步的方式构建请求
 
-同步请求：
+#### 同步请求：
+
+```
 Request request = new Request.Builder()
           .url("https://www.wanandroid.com/article/list/0/json")
           .build();
@@ -49,7 +58,9 @@ Response response = client.newCall(request).execute();
 if (response != null && response.code() == 200) {
   data.setText(response.body().string());
  }
-异步请求：
+ ```
+#### 异步请求：
+```
 Request request = new Request.Builder()
           .url("https://www.wanandroid.com/banner/json")
           .build();
@@ -68,8 +79,9 @@ client.newCall(request).enqueue(new Callback() {
          data.setText(e.getMessage());
      }
 });
-
-GET方式：
+```
+#### GET方式：
+```
 Request request = new Request.Builder()
           .url("https://www.wanandroid.com/banner/json")
           .get()
@@ -80,8 +92,9 @@ Response response = client.newCall(request).execute();
 if (response != null && response.code() == 200) {
   data.setText(response.body().string());
  }
-
-POST方式：
+```
+#### POST方式：
+```
 FormBody body = new FormBody.Builder()
          .add("username", "张三")
          .add("pwd", "abc123")
@@ -97,8 +110,9 @@ Response response = client.newCall(request).execute();
 if (response != null && response.code() == 200) {
   data.setText(response.body().string());
  }
-
-参数+文件上传：
+```
+####参数+文件上传：
+```
 String path = Environment.getExternalStorageDirectory().getAbsolutePath();
 
 File file = new File(path + "/tempCropped.jpeg");
@@ -124,3 +138,4 @@ Response response = client.newCall(request).execute();
 if (response != null && response.code() == 200) {
   data.setText(response.body().string());
  }
+ ```
