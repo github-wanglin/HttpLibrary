@@ -3,6 +3,7 @@ package com.wl.library.tcp.server;
 import com.wl.library.callback.tcpinterface.ReceiveRegister;
 import com.wl.library.callback.tcpinterface.SendRegister;
 import com.wl.library.callback.tcpinterface.Server;
+import com.wl.library.callback.tcpinterface.TcpConnectCallback;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -31,9 +32,12 @@ public class BIOServer implements Server {
     //监听端口
     private int port;
 
-    public BIOServer(int port, ReceiveRegister receiveRegister, SendRegister sendRegister, BiFunction<Socket, byte[], Object> dataHandler) {
+    private TcpConnectCallback connectCallback;
+
+    public BIOServer(int port, ReceiveRegister receiveRegister, SendRegister sendRegister, TcpConnectCallback connectCallback, BiFunction<Socket, byte[], Object> dataHandler) {
         this.receiveRegister = receiveRegister;
         this.sendRegister = sendRegister;
+        this.connectCallback = connectCallback;
         this.dataHandler = dataHandler;
         this.threadPool = Executors.newCachedThreadPool();
         mainThread = Thread.currentThread();
@@ -50,6 +54,9 @@ public class BIOServer implements Server {
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("server start error :" + e.getMessage());
+            if (connectCallback != null) {
+                connectCallback.connectFail(e);
+            }
             return;
         }
 
@@ -64,6 +71,9 @@ public class BIOServer implements Server {
             } catch (IOException e) {
                 e.printStackTrace();
                 System.out.println("建立连接失败");
+                if (connectCallback != null) {
+                    connectCallback.connectFail(e);
+                }
                 continue;
             }
             threadPool.execute(new Runnable() {
@@ -82,6 +92,9 @@ public class BIOServer implements Server {
                             }
                         } catch (IOException e) {
                             System.out.println("an connect is closed with IOException:" + e.getMessage());
+                            if (connectCallback != null) {
+                                connectCallback.connectFail(e);
+                            }
                             return;
                         }
                     }

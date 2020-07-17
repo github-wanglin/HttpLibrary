@@ -34,6 +34,9 @@ public class BIOClient implements Client {
             }
         } catch (IOException e) {
             e.printStackTrace();
+            if (connectCallback != null) {
+                connectCallback.connectFail(e);
+            }
         }
     }
 
@@ -49,6 +52,9 @@ public class BIOClient implements Client {
             re = sendRegister.send(socket, data);
         } catch (IOException e) {
             e.printStackTrace();
+            if (connectCallback != null) {
+                connectCallback.connectFail(e);
+            }
         }
         return re;
     }

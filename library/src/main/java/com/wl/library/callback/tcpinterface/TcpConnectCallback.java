@@ -5,4 +5,6 @@ public interface TcpConnectCallback {
 
     void disConnected();
 
+    void connectFail(Exception e);
+
 }

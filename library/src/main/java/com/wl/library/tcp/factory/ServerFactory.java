@@ -1,11 +1,10 @@
 package com.wl.library.tcp.factory;
 
 
-
-
 import com.wl.library.callback.tcpinterface.ReceiveRegister;
 import com.wl.library.callback.tcpinterface.SendRegister;
 import com.wl.library.callback.tcpinterface.Server;
+import com.wl.library.callback.tcpinterface.TcpConnectCallback;
 import com.wl.library.tcp.server.BIOServer;
 import com.wl.library.tcp.type.LengthFlagReceiveRegister;
 import com.wl.library.tcp.type.LengthFlagSendRegister;
@@ -26,7 +25,7 @@ public class ServerFactory {
      * @param dataHandler 业务逻辑函数
      * @return 构建的服务端对线，通过start启动
      */
-    public static Server getServer(int port, BiFunction<Socket, byte[], Object> dataHandler) {
+    public static Server getServer(int port, TcpConnectCallback connectCallback, BiFunction<Socket, byte[], Object> dataHandler) {
         Server re = null;
         ReceiveRegister receiveRegister = null;
         SendRegister sendRegister = null;
@@ -35,7 +34,7 @@ public class ServerFactory {
 
         sendRegister = new LengthFlagSendRegister(null);
 
-        re = new BIOServer(port, receiveRegister, sendRegister, dataHandler);
+        re = new BIOServer(port, receiveRegister, sendRegister, connectCallback, dataHandler);
 
         return re;
     }
