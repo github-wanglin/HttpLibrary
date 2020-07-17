@@ -1,9 +1,13 @@
 package com.wl.library.tcp.server;
 
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
 import com.wl.library.callback.tcpinterface.ReceiveRegister;
 import com.wl.library.callback.tcpinterface.SendRegister;
 import com.wl.library.callback.tcpinterface.Server;
-import com.wl.library.callback.tcpinterface.TcpConnectCallback;
+import com.wl.library.callback.tcpinterface.TcpServerFailCallback;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -32,12 +36,12 @@ public class BIOServer implements Server {
     //监听端口
     private int port;
 
-    private TcpConnectCallback connectCallback;
+    private TcpServerFailCallback tcpServerFailCallback;
 
-    public BIOServer(int port, ReceiveRegister receiveRegister, SendRegister sendRegister, TcpConnectCallback connectCallback, BiFunction<Socket, byte[], Object> dataHandler) {
+    public BIOServer(int port, ReceiveRegister receiveRegister, SendRegister sendRegister, TcpServerFailCallback tcpServerFailCallback, BiFunction<Socket, byte[], Object> dataHandler) {
         this.receiveRegister = receiveRegister;
         this.sendRegister = sendRegister;
-        this.connectCallback = connectCallback;
+        this.tcpServerFailCallback = tcpServerFailCallback;
         this.dataHandler = dataHandler;
         this.threadPool = Executors.newCachedThreadPool();
         mainThread = Thread.currentThread();
@@ -54,8 +58,8 @@ public class BIOServer implements Server {
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("server start error :" + e.getMessage());
-            if (connectCallback != null) {
-                connectCallback.connectFail(e);
+            if (tcpServerFailCallback != null) {
+                tcpServerFailCallback.serverFail(e);
             }
             return;
         }
@@ -71,12 +75,13 @@ public class BIOServer implements Server {
             } catch (IOException e) {
                 e.printStackTrace();
                 System.out.println("建立连接失败");
-                if (connectCallback != null) {
-                    connectCallback.connectFail(e);
+                if (tcpServerFailCallback != null) {
+                    tcpServerFailCallback.serverFail(e);
                 }
                 continue;
             }
             threadPool.execute(new Runnable() {
+                @RequiresApi(api = Build.VERSION_CODES.N)
                 @Override
                 public void run() {
                     while (!Thread.currentThread().isInterrupted()) {
@@ -92,8 +97,8 @@ public class BIOServer implements Server {
                             }
                         } catch (IOException e) {
                             System.out.println("an connect is closed with IOException:" + e.getMessage());
-                            if (connectCallback != null) {
-                                connectCallback.connectFail(e);
+                            if (tcpServerFailCallback != null) {
+                                tcpServerFailCallback.serverFail(e);
                             }
                             return;
                         }
