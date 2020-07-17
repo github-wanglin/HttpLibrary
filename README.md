@@ -5,12 +5,17 @@
 
 *return 服务器返回给客户端的object*
 ```
-Server bioServer = ServerFactory.getServer(1080, new BiFunction<Socket, byte[], Object>() {
-          @Override
-          public Object apply(Socket socket, byte[] bytes) {
-             return null;
-          }
-});
+Server bioServer = ServerFactory.getServer(1080, new TcpServerFailCallback() {
+        @Override
+        public void serverFail(Exception e) {
+
+        }
+    }, new BiFunction<Socket, byte[], Object>() {
+        @Override
+        public Object apply(Socket socket, byte[] bytes) {
+            return null;
+        }
+    });
 bioServer.start();
 ```
 #### 创建客户端：
@@ -27,6 +32,11 @@ Client client = ClientFactory.getClient("192.168.31.137", 1080, new TcpConnectCa
        @Override
        public void disConnected() {
 
+       }
+       
+       @Override
+       public void connectFail(Exception e) {
+        
        }
 });
 ```
