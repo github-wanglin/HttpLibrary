@@ -27,7 +27,7 @@ public class LengthFlagReceiveRegister implements ReceiveRegister {
         BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
         byte[] result;
         //读取头4个字节，转换为int即为报文长度
-        byte[] lengthByte = IOUtil.readBytesFromInputStream(bufferedInputStream, 8);
+        byte[] lengthByte = IOUtil.readBytesFromInputStream(bufferedInputStream, 4);
         int length = ByteBuffer.wrap(lengthByte).getInt();
 
 

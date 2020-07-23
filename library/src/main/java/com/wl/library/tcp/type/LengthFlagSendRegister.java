@@ -29,7 +29,7 @@ public class LengthFlagSendRegister implements SendRegister {
         int length = objectBytes.length;
         System.out.println("from client:" + new String(objectBytes));
         //写入长度
-        out.write(ByteBuffer.allocate(8).putInt(length).array());
+        out.write(ByteBuffer.allocate(4).putInt(length).array());
         //写入数据
         out.write(objectBytes);
         out.flush();
