@@ -15,7 +15,6 @@ import java.nio.ByteBuffer;
  * description:按长度标识定界的发送策略
  */
 public class LengthFlagSendRegister implements SendRegister {
-
     private final ReceiveRegister receiveRegister;
 
     public LengthFlagSendRegister(ReceiveRegister receiveRegister) {
