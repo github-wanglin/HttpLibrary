@@ -1,9 +1,9 @@
-## TCP使用：支持传输Object对象
+## TCP使用：支持传输byte[]
 
 #### 创建服务端：
 *端口号：1080*
 
-*return 服务器返回给客户端的object*
+*return 服务器返回给客户端的byte[]*
 ```
 Server bioServer = ServerFactory.getServer(1080, new TcpServerFailCallback() {
         @Override
