@@ -10,7 +10,7 @@ Server bioServer = ServerFactory.getServer(1080, new TcpServerFailCallback() {
         public void serverFail(Exception e) {
 
         }
-    }, new BiFunction<Socket, byte[], Object>() {
+    }, new BiFunction<Socket, byte[], byte[]>() {
         @Override
         public Object apply(Socket socket, byte[] bytes) {
             return null;
@@ -43,7 +43,7 @@ Client client = ClientFactory.getClient("192.168.31.137", 1080, new TcpConnectCa
 * 发送数据:
 
 ```
-byte[] result  = client.send(obiect);
+byte[] result  = client.send(byte[]);
 ```
 * 断开链接：
 
