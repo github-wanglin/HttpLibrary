@@ -48,6 +48,7 @@ public class BIOServer implements Server {
         this.port = port;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void start() {
         ServerSocket server;
@@ -80,28 +81,24 @@ public class BIOServer implements Server {
                 }
                 continue;
             }
-            threadPool.execute(new Runnable() {
-                @RequiresApi(api = Build.VERSION_CODES.N)
-                @Override
-                public void run() {
-                    while (!Thread.currentThread().isInterrupted()) {
-                        byte[] result;
-                        try {
-                            //通过策略模式解耦报文定界策略与本类
-                            result = receiveRegister.read(in);
-                            //由调用者传入业务处理逻辑，如需返回数据，可通过socket对象获取发送缓冲区并写入返回数据
-                            Object returnMsg = dataHandler.apply(socket, result);
-                            if (returnMsg != null) {
-                                //需回复数据不为null ，则回复数据
-                                sendRegister.send(socket, returnMsg);
-                            }
-                        } catch (IOException e) {
-                            System.out.println("an connect is closed with IOException:" + e.getMessage());
-                            if (tcpServerFailCallback != null) {
-                                tcpServerFailCallback.serverFail(e);
-                            }
-                            return;
+            threadPool.execute(() -> {
+                while (!Thread.currentThread().isInterrupted()) {
+                    byte[] result;
+                    try {
+                        //通过策略模式解耦报文定界策略与本类
+                        result = receiveRegister.read(in);
+                        //由调用者传入业务处理逻辑，如需返回数据，可通过socket对象获取发送缓冲区并写入返回数据
+                        byte[] returnMsg = dataHandler.apply(socket, result);
+                        if (returnMsg != null) {
+                            //需回复数据不为null ，则回复数据
+                            sendRegister.send(socket, returnMsg);
                         }
+                    } catch (IOException e) {
+                        System.out.println("an connect is closed with IOException:" + e.getMessage());
+                        if (tcpServerFailCallback != null) {
+                            tcpServerFailCallback.serverFail(e);
+                        }
+                        return;
                     }
                 }
             });
