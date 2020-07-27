@@ -2,7 +2,6 @@ package com.wl.library.tcp.type;
 
 import com.wl.library.callback.tcpinterface.ReceiveRegister;
 import com.wl.library.callback.tcpinterface.SendRegister;
-import com.wl.library.utils.IOUtil;
 
 import java.io.BufferedOutputStream;
 import java.io.IOException;
