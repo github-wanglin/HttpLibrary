@@ -6,7 +6,6 @@ import com.wl.library.callback.tcpinterface.SendRegister;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.nio.ByteBuffer;
 
 /**
  * author:wanglin
@@ -25,8 +24,8 @@ public class LengthFlagSendRegister implements SendRegister {
         byte[] result;
         BufferedOutputStream out = new BufferedOutputStream(socket.getOutputStream());
         int length = data.length;
-        //写入长度
-        out.write(ByteBuffer.allocate(4).putInt(length).array());
+//        //写入报文长度
+//        out.write(ByteBuffer.allocate(4).putInt(length).array());
         //写入数据
         out.write(data);
         out.flush();

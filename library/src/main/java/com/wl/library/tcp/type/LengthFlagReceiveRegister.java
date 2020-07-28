@@ -1,14 +1,11 @@
 package com.wl.library.tcp.type;
 
 
-
 import com.wl.library.callback.tcpinterface.ReceiveRegister;
-import com.wl.library.utils.IOUtil;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.ByteBuffer;
 
 /**
  * author:wanglin
@@ -26,13 +23,13 @@ public class LengthFlagReceiveRegister implements ReceiveRegister {
 
         BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
         byte[] result;
-        //读取头4个字节，转换为int即为报文长度
-        byte[] lengthByte = IOUtil.readBytesFromInputStream(bufferedInputStream, 4);
-        int length = ByteBuffer.wrap(lengthByte).getInt();
-
-
+//        //读取头4个字节，转换为int即为报文长度
+//        byte[] lengthByte = IOUtil.readBytesFromInputStream(bufferedInputStream, 4);
+//        int length = ByteBuffer.wrap(lengthByte).getInt();
+//        IOUtil.readBytesFromInputStream(bufferedInputStream, length);
+        int length = bufferedInputStream.read(new byte[1024]);
         //读取指定长度字节
-        result = IOUtil.readBytesFromInputStream(bufferedInputStream, length);
+        result = new byte[length];
         System.out.println("from receive:" + new String(result));
 
         return result;
