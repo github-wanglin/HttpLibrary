@@ -23,7 +23,7 @@ public class LengthFlagSendRegister implements SendRegister {
     public byte[] send(Socket socket, byte[] data) throws IOException {
         byte[] result;
         BufferedOutputStream out = new BufferedOutputStream(socket.getOutputStream());
-        int length = data.length;
+//        int length = data.length;
 //        //写入报文长度
 //        out.write(ByteBuffer.allocate(4).putInt(length).array());
         //写入数据
