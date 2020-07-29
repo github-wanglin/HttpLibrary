@@ -30,4 +30,23 @@ public class ClientFactory {
         return client;
     }
 
+    public static Client getClient(String host, int port, ReceiveRegister receiveRegister, TcpConnectCallback connectCallback) {
+        SendRegister sendRegister = null;
+        Client client = null;
+
+        sendRegister = new LengthFlagSendRegister(receiveRegister);
+
+        client = new BIOClient(host, port, sendRegister, connectCallback);
+
+        return client;
+    }
+
+    public static Client getClient(String host, int port, SendRegister sendRegister, TcpConnectCallback connectCallback) {
+
+        Client client = null;
+        client = new BIOClient(host, port, sendRegister, connectCallback);
+
+        return client;
+    }
+
 }
